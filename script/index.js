@@ -1,3 +1,10 @@
+function removeActiveClass (){
+  const activeButtons = document.getElementsByClassName("active")
+    for(let btn of activeButtons){
+      btn.classList.remove("active");
+    }
+}
+
 function loadCategories (){
   fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
   .then(res => res.json())
@@ -7,7 +14,32 @@ function loadCategories (){
 const loadVideos = () => {
   fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
   .then(Response => Response.json())
-  .then(data => displayVideos(data.videos))
+  .then(data => {
+    removeActiveClass();
+    const allBtn = document.getElementById("btn-all");
+      allBtn.classList.add("active");
+      displayVideos(data.videos);
+
+  
+  })
+  removeActiveClass();
+}
+
+const loadCategoryVideos = (id) => {
+  const url = `
+    https://openapi.programming-hero.com/api/phero-tube/category/${id}
+    `;
+
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      removeActiveClass();
+      const clickedButton = document.getElementById(`btn-${id}`)
+      // console.log(clickedButton);
+      clickedButton.classList.add("active")
+      displayVideos(data.category)
+      
+    })
 }
 
 
@@ -20,7 +52,7 @@ function displayCategories (categories){
     // console.log(cat)
     const categoryDiv = document.createElement("div");
     categoryDiv.innerHTML = `
-    <button class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
+    <button id ="btn-${cat.category_id}" onClick = "loadCategoryVideos(${cat.category_id})" class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
     `
     categoryContainer.appendChild(categoryDiv);
   } 
@@ -29,6 +61,17 @@ function displayCategories (categories){
 const displayVideos = (videos) => {
   // console.log(videos);
   const videoContainer = document.getElementById("video-container");
+  videoContainer.innerHTML = "";
+
+  if(videos.length == 0){
+    videoContainer.innerHTML = `
+      <div class="py-64 col-span-full flex flex-col justify-center items-center">
+          <img src="./assets/Icon.png" alt="">
+          <h2 class="text-2xl font-bold">Oops!! There is no content here</h2>
+        </div>
+    `
+    return;
+  }
 
   videos.forEach(video => {
     // console.log(video)
@@ -65,4 +108,3 @@ const displayVideos = (videos) => {
 
 
 loadCategories();
-loadVideos();
