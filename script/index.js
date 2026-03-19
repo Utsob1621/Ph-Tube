@@ -42,6 +42,7 @@ const loadVideos = (searchText = "") => {
 }
 
 const loadCategoryVideos = (id) => {
+  showLoader()
   const url = `
     https://openapi.programming-hero.com/api/phero-tube/category/${id}
     `;
@@ -122,6 +123,7 @@ const displayVideos = (videos) => {
           <h2 class="text-2xl font-bold">Oops!! There is no content here</h2>
         </div>
     `
+    hideLoader();
     return;
   }
 
