@@ -26,28 +26,40 @@ function displayCategories (categories){
   } 
 }
 
-// {
-//     "category_id": "1003",
-//     "video_id": "aaac",
-//     "thumbnail": "https://i.ibb.co/NTncwqH/luahg-at-pain.jpg",
-//     "title": "Laugh at My Pain",
-//     "authors": [
-//         {
-//             "profile_picture": "https://i.ibb.co/XVHM7NP/kevin.jpg",
-//             "profile_name": "Kevin Hart",
-//             "verified": false
-//         }
-//     ],
-//     "others": {
-//         "views": "1.1K",
-//         "posted_date": "13885"
-//     },
-//     "description": "Comedian Kevin Hart brings his unique brand of humor to life in 'Laugh at My Pain.' With 1.1K views, this show offers a hilarious and candid look into Kevin's personal stories, struggles, and triumphs. It's a laugh-out-loud experience filled with sharp wit, clever insights, and a relatable charm that keeps audiences coming back for more."
-// }
-
 const displayVideos = (videos) => {
-  console.log(videos);
-  const videoContainer = document.getElementById("")
+  // console.log(videos);
+  const videoContainer = document.getElementById("video-container");
+
+  videos.forEach(video => {
+    // console.log(video)
+    const videoCard = document.createElement("div");
+    videoCard.innerHTML = `
+      <div class="card bg-base-100">
+  <figure class="relative ">
+    <img class ="w-full h-[230px] object-cover rounded-md"
+      src="${video.thumbnail}"
+      alt="Shoes" />
+      <span class="absolute bg-black text-white rounded-sm text-sm bottom-2 right-4 px-2 ">3hrs 56 min ago</span>
+  </figure>
+  <div class=" flex gap-5 pt-3">
+    <div class="profile">
+      <div class="avatar">
+        <div class="ring-primary ring-offset-base-100 w-10 rounded-full ring-offset-2">
+          <img src="${video.authors[0].profile_picture}" />
+          </div>
+        </div>
+    </div>
+      <div class="intro">
+      <h2 class="text-sm font-semibold">${video.title}</h2>
+      <p class="flex gap-2 text-gray-400">${video.authors[0].profile_name} 
+        <img class="w-5 h-5" src="./assets/icons8-verified-48.png" alt=""></p>
+      <p class="text-gray-400">${video.others.views} views</p>
+      </div>
+    </div>
+  </div>
+    `
+    videoContainer.appendChild(videoCard);
+  });
 
 } 
 
