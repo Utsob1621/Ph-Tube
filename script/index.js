@@ -1,3 +1,14 @@
+const showLoader = () => {
+  document.getElementById("loading").classList.remove("hidden")
+  document.getElementById("video-container").classList.add("hidden")
+
+}
+const hideLoader = () => {
+  document.getElementById("loading").classList.add("hidden")
+  document.getElementById("video-container").classList.remove("hidden")
+
+}
+
 function removeActiveClass (){
   const activeButtons = document.getElementsByClassName("active")
     for(let btn of activeButtons){
@@ -12,6 +23,8 @@ function loadCategories (){
 }
 
 const loadVideos = (searchText = "") => {
+  showLoader()
+
   fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
   .then(Response => Response.json())
   .then(data => {
@@ -19,9 +32,13 @@ const loadVideos = (searchText = "") => {
 
       document.getElementById("btn-all").classList.add("active");
       displayVideos(data.videos);
-
   })
-  removeActiveClass();
+
+  .catch(err => {
+        console.error(err);
+        hideLoader();
+    });
+
 }
 
 const loadCategoryVideos = (id) => {
@@ -37,8 +54,12 @@ const loadCategoryVideos = (id) => {
       // console.log(clickedButton);
       clickedButton.classList.add("active")
       displayVideos(data.category)
-      
     })
+
+    .catch(err => {
+        console.error(err);
+        hideLoader();
+    });
 }
 
 const loadVideoDetails = (videoId) => {
@@ -57,15 +78,16 @@ const displayVideoDetails = (video) => {
   document.getElementById("video_details").showModal()
   const detailsContainer = document.getElementById("details-container")
    detailsContainer.innerHTML =`
-   <div class="card bg-base-100 image-full shadow-sm">
+   <div class="card bg-base-100 image-full">
   <figure>
     <img
       src="${video.thumbnail}"
-      alt="Shoes" />
+      alt="image" />
   </figure>
   <div class="card-body">
     <h2 class="card-title">${video.title}</h2>
-    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+    <p class="text-gray-400">${video.others.views} views</p>
+    <p class="text-gray-400">${video.description} views</p>
   </div>
 </div>
    `
@@ -134,7 +156,8 @@ const displayVideos = (videos) => {
     `
     videoContainer.appendChild(videoCard);
   });
-} 
+  hideLoader();
+};
 
 document.getElementById("search-input").addEventListener("keyup", (e) => {
   const input = e .target.value;
